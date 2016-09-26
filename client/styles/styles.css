@@ -88,3 +88,8 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+.msgPanel {
+    border: 1px solid black;
+    padding: 5px;
+}
+
