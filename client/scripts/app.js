@@ -3,7 +3,6 @@
 ===============GET request=============
 ======================================*/
 var roomNames = [];
-var friends = [];
 $(document).ready(function() {
 
   $.ajax({
@@ -14,7 +13,7 @@ $(document).ready(function() {
       var array = messages.results;
       for (var i = 0; i < array.length; i++) {
         var html = htmlTemplate(array[i]);
-        $('.messageContainer').prepend(html);
+        $('.messageContainer').append(html);
       }
 
       //Create the room dropdown menu
@@ -34,6 +33,8 @@ $(document).ready(function() {
   });
 
   $( '.dropdown' ).change(function(event) {
+    $('.msgPanel').remove();
+
     $.ajax({
       type: 'GET',
       url: 'https://api.parse.com/1/classes/messages',
@@ -41,7 +42,11 @@ $(document).ready(function() {
       success: function(messages) {
         var array = messages.results;
         var room = $('.dropdown').val();
-        var roomArray = _.filter(array, function(item) { return item.roomname === room; });
+        if (room === 'All rooms') { 
+          roomArray = array; 
+        } else { 
+          roomArray = _.filter(array, function(item) { return item.roomname === room; })
+        }
         for (var i = 0; i < roomArray.length; i++) {
           var html = htmlTemplate(roomArray[i]);
           $('.messageContainer').prepend(html);
@@ -52,24 +57,15 @@ $(document).ready(function() {
 
   $('.messageContainer').on('click', '.username',  function(event) {
     var name = this.innerHTML;
-    if (friends.indexOf(name) === -1) {
-      friends.push(this.innerHTML);      
-    }
-    // debugger;
     var $allNames = $('.username');
 
     $allNames.each(function(index) {
       var node = $($allNames[index]);
       if (node.text() === name) {
-        node.addClass('friend');
+        node.toggleClass('friend');
       }
     });
-    // for (var i = 0; i < $allNames.length; i++) {
-    //   // if ($allNames[i].innerHTML === name) {
-    //   //   $allNames[i].addClass('friends');
-    //   //   $( ".username" ).addClass( "donald trump" );
-    //   // }
-    // }
+
   });
 
 });
@@ -95,6 +91,7 @@ var htmlTemplate = function (message, friend) {
 
   msgPanel.append('<p class="username">' + message.username + '</p>');    
   msgPanel.append('<p>' + htmlEscape(message.text) + '</p>');
+  msgPanel.append('<p>' + 'room: ' + htmlEscape(message.roomname) + '</p>');
   
   return msgPanel;
 };
@@ -118,7 +115,16 @@ var htmlEscape = function (str) {
 var postMessage = function(message) {
   var messageObj = {};
   messageObj.text = message;
-  messageObj.username = 'Marcus';
+  messageObj.username = window.location.search.split('=')[1];
+
+  //If the new room name text box is empty
+  if (!$('#newRoom').val()) {
+    messageObj.roomname = $('.dropdown').val();
+  } else {
+    messageObj.roomname = $('#newRoom').val();
+  }
+  console.log(messageObj);
+
 
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
@@ -136,13 +142,10 @@ var postMessage = function(message) {
   });
 };
 
-
-//Bold names when we click on them
-//Periodic get requests & refactor
-//Waiting image while refreshing
-//Save friends so they are not forgotten on reload
-//Escape pink man
-//Spam control
+//1. Periodic get requests & refactor
+//2. Waiting image while refreshing
+//3. Spam control
+//4. Escape pink man
 
 
 
