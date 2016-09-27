@@ -55,13 +55,12 @@ $(document).ready(function() {
     if (friends.indexOf(name) === -1) {
       friends.push(this.innerHTML);      
     }
-
+    // debugger;
     var $allNames = $('.username');
 
     $allNames.each(function(index) {
       var node = $($allNames[index]);
-      console.log(node);
-      if (node.innerHTML === name) {
+      if (node.text() === name) {
         node.addClass('friend');
       }
     });
@@ -138,12 +137,12 @@ var postMessage = function(message) {
 };
 
 
-//Spam control
-//Escape pink man
+//Bold names when we click on them
+//Periodic get requests & refactor
 //Waiting image while refreshing
-//Add friends
-//See messages by friends
-// save friends so they are not forgotten on reload
+//Save friends so they are not forgotten on reload
+//Escape pink man
+//Spam control
 
 
 

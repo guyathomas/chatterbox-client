@@ -84,8 +84,10 @@ form input[type=text] {
 }
 
 .friend {
-    color: #fff;
-    background-color: #0090da;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+
 }
 
 .msgPanel {
