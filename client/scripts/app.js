@@ -50,12 +50,27 @@ $(document).ready(function() {
     });
   });
 
-  $('.messageContainer').on('click', '.username',  function (event) {
+  $('.messageContainer').on('click', '.username',  function(event) {
     var name = this.innerHTML;
     if (friends.indexOf(name) === -1) {
       friends.push(this.innerHTML);      
     }
 
+    var $allNames = $('.username');
+
+    $allNames.each(function(index) {
+      var node = $($allNames[index]);
+      console.log(node);
+      if (node.innerHTML === name) {
+        node.addClass('friend');
+      }
+    });
+    // for (var i = 0; i < $allNames.length; i++) {
+    //   // if ($allNames[i].innerHTML === name) {
+    //   //   $allNames[i].addClass('friends');
+    //   //   $( ".username" ).addClass( "donald trump" );
+    //   // }
+    // }
   });
 
 });
@@ -78,11 +93,8 @@ var htmlTemplate = function (message, friend) {
   var msgPanel = $('<div class="msgPanel"></div>');
   
   //Add friend styling
-  if (friend) {
-    msgPanel.append('<p class="username friend">' + message.username + '</p>');    
-  } else {
-    msgPanel.append('<p class="username">' + message.username + '</p>');    
-  }
+
+  msgPanel.append('<p class="username">' + message.username + '</p>');    
   msgPanel.append('<p>' + htmlEscape(message.text) + '</p>');
   
   return msgPanel;
